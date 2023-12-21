@@ -102,9 +102,9 @@ export GITHUB_TOKEN=<gh_token>
 ```bash
 flux bootstrap github \
   --owner=smorenburg \
-  --repository=astro-source \
+  --repository=jingle-ops-source \
   --branch=main \
-  --path=clusters/staging \
+  --path=clusters/production \
   --personal \
   --private=false
 ```
