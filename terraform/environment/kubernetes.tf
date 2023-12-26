@@ -82,14 +82,14 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 }
 
 # Assign the cluster admin role to the current user.
-resource "azurerm_role_assignment" "cluster_admin" {
+resource "azurerm_role_assignment" "cluster_admin_current_user" {
   scope                = azurerm_kubernetes_cluster.default.id
   role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
 # Assign the cluster admin role to the tf-runner managed identity.
-resource "azurerm_role_assignment" "cluster_admin" {
+resource "azurerm_role_assignment" "cluster_admin_tf_runner" {
   scope                = azurerm_kubernetes_cluster.default.id
   role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
   principal_id         = azurerm_user_assigned_identity.tf_runner.principal_id
