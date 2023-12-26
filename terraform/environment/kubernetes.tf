@@ -88,7 +88,14 @@ resource "azurerm_role_assignment" "cluster_admin" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
-# Assign the 'AcrPull' role for the managed identity to the container registry.
+# Assign the cluster admin role to the tf-runner managed identity.
+resource "azurerm_role_assignment" "cluster_admin" {
+  scope                = azurerm_kubernetes_cluster.default.id
+  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
+  principal_id         = azurerm_user_assigned_identity.tf_runner.principal_id
+}
+
+# Assign the 'AcrPull' role to the Kubernetes cluster managed identity to the container registry.
 resource "azurerm_role_assignment" "container_registry" {
   scope                = data.terraform_remote_state.shared.outputs.container_registry_id
   role_definition_name = "AcrPull"
