@@ -117,10 +117,16 @@ resource "azurerm_disk_encryption_set" "default" {
   depends_on = [azurerm_key_vault_access_policy.disk_encryption_set]
 }
 
-# Assign the contributor role to tf-runner managed identity.
-resource "azurerm_role_assignment" "contributor" {
-  scope                            = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
-  role_definition_name             = "Contributor"
-  principal_id                     = azurerm_user_assigned_identity.tf_runner.principal_id
-  skip_service_principal_aad_check = true
+# Assign the 'Contributor' role to tf-runner managed identity on the subscription.
+resource "azurerm_role_assignment" "contributor_tf_runner_subscription" {
+  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.tf_runner.principal_id
+}
+
+# Assign the 'Network Contributor' role to the Kubernetes cluster managed identity on the shared resource group.
+resource "azurerm_role_assignment" "network_contributor_kubernetes_cluster_resource_group" {
+  scope                = data.terraform_remote_state.shared.outputs.resource_group_id
+  role_definition_name = "Network Contributor"
+  principal_id         = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
 }

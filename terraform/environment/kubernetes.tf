@@ -87,36 +87,25 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   }
 }
 
-# Assign the cluster admin role to the current user.
-resource "azurerm_role_assignment" "cluster_admin_current_user" {
-  scope                            = azurerm_kubernetes_cluster.default.id
-  role_definition_name             = "Azure Kubernetes Service RBAC Cluster Admin"
-  principal_id                     = data.azurerm_client_config.current.object_id
-  skip_service_principal_aad_check = true
+# Assign the cluster admin role to the current user on the Kubernetes cluster.
+resource "azurerm_role_assignment" "cluster_admin_current_user_kubernetes_cluster" {
+  scope                = azurerm_kubernetes_cluster.default.id
+  role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
+  principal_id         = data.azurerm_client_config.current.object_id
 }
 
-# Assign the cluster admin role to the tf-runner managed identity.
-resource "azurerm_role_assignment" "cluster_admin_tf_runner" {
-  scope                            = azurerm_kubernetes_cluster.default.id
-  role_definition_name             = "Azure Kubernetes Service RBAC Cluster Admin"
-  principal_id                     = azurerm_user_assigned_identity.tf_runner.principal_id
-  skip_service_principal_aad_check = true
-}
-
-# Assign the 'AcrPull' role to the Kubernetes cluster managed identity for the container registry.
+# Assign the 'AcrPull' role to the Kubernetes cluster managed identity on the shared container registry.
 resource "azurerm_role_assignment" "arcpull_kubernetes_cluster_container_registry" {
-  scope                            = data.terraform_remote_state.shared.outputs.container_registry_id
-  role_definition_name             = "AcrPull"
-  principal_id                     = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
-  skip_service_principal_aad_check = true
+  scope                = data.terraform_remote_state.shared.outputs.container_registry_id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
 }
 
-# Assign the 'Managed Identity Operator' role to the Kubernetes cluster managed identity.
+# Assign the 'Managed Identity Operator' role to the Kubernetes cluster managed identity on the Kubernetes cluster.
 resource "azurerm_role_assignment" "managed_identity_operator_kubernetes_cluster" {
-  scope                            = azurerm_user_assigned_identity.kubernetes_cluster.id
-  role_definition_name             = "Managed Identity Operator"
-  principal_id                     = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
-  skip_service_principal_aad_check = true
+  scope                = azurerm_user_assigned_identity.kubernetes_cluster.id
+  role_definition_name = "Managed Identity Operator"
+  principal_id         = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
 }
 
 # Install the Flux cluster extension.

@@ -76,3 +76,23 @@ resource "azurerm_container_registry" "default" {
   location            = var.location
   sku                 = "Premium"
 }
+
+# Create the public IP address for the staging NGINX Ingress Controller.
+resource "azurerm_public_ip" "ingress_nginx_stage" {
+  name                = "pip-nginx-${var.app}-stage-${local.location_abbreviation}"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.default.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  domain_name_label   = "${var.app}-stage-${local.location_abbreviation}"
+}
+
+# Create the public IP address for the production NGINX Ingress Controller.
+resource "azurerm_public_ip" "ingress_nginx_prod" {
+  name                = "pip-nginx-${var.app}-prod-${local.location_abbreviation}"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.default.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  domain_name_label   = "${var.app}-prod-${local.location_abbreviation}"
+}

@@ -27,12 +27,11 @@ resource "azurerm_subnet_network_security_group_association" "aks" {
   network_security_group_id = azurerm_network_security_group.aks.id
 }
 
-# Assign the 'Network Contributor' role for the managed identity to the subnet.
+# Assign the 'Network Contributor' role to the managed identity on the subnet.
 resource "azurerm_role_assignment" "network_contributor_kubernetes_cluster_subnet" {
-  scope                            = azurerm_subnet.aks.id
-  role_definition_name             = "Network Contributor"
-  principal_id                     = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
-  skip_service_principal_aad_check = true
+  scope                = azurerm_subnet.aks.id
+  role_definition_name = "Network Contributor"
+  principal_id         = azurerm_user_assigned_identity.kubernetes_cluster.principal_id
 }
 
 # Create the security rule for inbound web traffic from any source.
