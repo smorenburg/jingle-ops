@@ -87,7 +87,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   }
 }
 
-# Assign the cluster admin role to the current user on the Kubernetes cluster.
+# Assign the 'Cluster Admin' role to the current user on the Kubernetes cluster.
 resource "azurerm_role_assignment" "cluster_admin_current_user_kubernetes_cluster" {
   scope                = azurerm_kubernetes_cluster.default.id
   role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
