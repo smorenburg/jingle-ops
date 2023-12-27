@@ -119,7 +119,8 @@ resource "azurerm_disk_encryption_set" "default" {
 
 # Assign the contributor role to tf-runner managed identity.
 resource "azurerm_role_assignment" "contributor" {
-  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
-  role_definition_name = "Contributor"
-  principal_id         = azurerm_user_assigned_identity.tf_runner.principal_id
+  scope                            = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
+  role_definition_name             = "Contributor"
+  principal_id                     = azurerm_user_assigned_identity.tf_runner.principal_id
+  skip_service_principal_aad_check = true
 }
