@@ -37,7 +37,7 @@ variable "environment_abbreviation" {
 }
 
 variable "resource_group" {
-  description = "Required. The name of the resource group containing the storage account including the Terraform state."
+  description = "Required. The name of the resource group of the storage account including the Terraform state."
   type        = string
 }
 

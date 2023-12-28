@@ -14,11 +14,11 @@ output "log_analytics_workspace_id" {
 }
 
 output "azurerm_public_ip_ingress_nginx_stage_ip_address" {
-  description = "The public IP address for the staging NGINX Ingress Controller."
+  description = "The public IP address for the staging NGINX ingress controller."
   value       = azurerm_public_ip.ingress_nginx_stage.ip_address
 }
 
 output "azurerm_public_ip_ingress_nginx_prod_ip_address" {
-  description = "The public IP address for the production NGINX Ingress Controller."
+  description = "The public IP address for the production NGINX ingress controller."
   value       = azurerm_public_ip.ingress_nginx_prod.ip_address
 }

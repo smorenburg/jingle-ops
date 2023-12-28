@@ -69,6 +69,6 @@ resource "azurerm_key_vault_key" "disk_encryption_set" {
 
   depends_on = [
     azurerm_key_vault_access_policy.disk_encryption_set,
-    azurerm_key_vault_access_policy.default
+    azurerm_key_vault_access_policy.current_user
   ]
 }
